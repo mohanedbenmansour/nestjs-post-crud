@@ -9,9 +9,9 @@ export class PostService {
     constructor(@InjectModel('Post') private postModel: Model<Post>) {}
 
 
-async createPost(PostDTO: PostDTO, url: string) : Promise<any>{
+async createPost(PostDTO: PostDTO) : Promise<any>{
     const post = new this.postModel(PostDTO);
-    post.image = url;
+    post.image = "url";
     return await post.save();
 }
 
@@ -24,10 +24,9 @@ async findPostById(id): Promise<any>{
     return await this.postModel.findById(id).exec();
 }
 
-async updatePost(PostDTO: PostDTO, url: string,id): Promise<any>{
-    const post = new this.postModel(PostDTO);
-    post.image = url;
-    return await this.postModel.findByIdAndUpdate(id,post, { new: true });
+async updatePost(PostDTO: PostDTO,id): Promise<any>{
+    const filter = { _id: id };
+    return await this.postModel.findOneAndUpdate(filter,PostDTO);
 }
 
 async deletePost(id): Promise<any>{
